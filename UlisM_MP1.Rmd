@@ -1,0 +1,23 @@
+---
+title: "Mini-Project 1"
+author: "Michael Ulis, Ayla Orona, Maeric Barrows"
+date: "2024-03-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Front Matter
+```{r}
+remove(list = ls())
+
+#Add libraries as needed
+library(tidyverse)
+library(readxl)
+
+#Read in dataset
+COD <- read_excel("C:/Misha/College Stuff/cmpsc132/hw/CODGames2_mp.xlsx")
+View(COD)
+```
