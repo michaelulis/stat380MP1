@@ -21,3 +21,60 @@ library(readxl)
 COD <- read_excel("C:/Misha/College Stuff/cmpsc132/hw/CODGames2_mp.xlsx")
 View(COD)
 ```
+
+## MAERIC. Primary Weapon
+The PrimaryWeapon column represents the main weapon used in each Call of Duty game. PrimaryWeapon is a categorical variable. Each weapon is represented by their name in string form. In every game, a primary weapon is used, so there are no missing instances.
+
+```{r Missing Instances of PrimaryWeapon}
+sum(is.na(COD$PrimaryWeapon))
+```
+
+We can see the most common weapons used in this table and visualization.
+
+```{r PrimaryWeapon Table}
+COD %>%
+  group_by(PrimaryWeapon) %>%
+  summarize(TimesPlayed=n()) %>%
+  arrange(desc(TimesPlayed))
+```
+
+```{r}
+ggplot(COD, aes(x = PrimaryWeapon)) +
+  geom_bar(fill = "maroon") +
+  labs(x = "Weapon Used",
+       y = "Count")
+```
+
+We can learn that the player from whom this data was recorded uses the M16 the most, with 48 times played.
+
+## MAERIC. Deaths
+The Deaths column represents how many times the player gets killed by another during a match. Deaths is a numerical variable. This column does not have any missing instances.
+
+```{r}
+sum(is.na(COD$Deaths))
+```
+We can learn more about the Deaths variable by examining this table and visualization.
+
+```{r}
+COD %>%
+  summarize(N=n(),
+            mean=mean(Deaths),
+            min=min(Deaths),
+            median=median(Deaths),
+            max=max(Deaths),
+            sd=sd(Deaths))
+```
+Using this table, we learn that, on average, this player died 15 times per round. That is also the total number of deaths they achieved the most. At minimum, this player died 4 times in one match, but in their worst match, they suffered 42 deaths.
+
+```{r}
+ggplot(COD, aes(x=Deaths, y=TotalXP)) +
+  geom_point(color = "#880808") +
+  geom_smooth(method=lm, se=FALSE, color = "red") +
+  labs(x = "Deaths",
+       y = "Total XP")
+```
+This visualization compares the number of deaths per game to the total XP obtained in that game. As indicated by the graph, there is not a strong correlation in either direction between deaths and total XP.
+
+
+
+POTENTIAL BIG QUESTION: How does map/weapon choice/score affect overall performance?
