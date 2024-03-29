@@ -16,11 +16,13 @@ remove(list = ls())
 #Add libraries as needed
 library(tidyverse)
 library(readxl)
+<<<<<<< HEAD
 
 #Read in dataset
-COD <- read_excel("C:/Misha/College Stuff/cmpsc132/hw/CODGames2_mp.xlsx")
+COD <- read_excel("CODGames2_mp.xlsx")
 View(COD)
 ```
+<<<<<<< HEAD
 
 ## MAERIC. Primary Weapon
 The PrimaryWeapon column represents the main weapon used in each Call of Duty game. PrimaryWeapon is a categorical variable. Each weapon is represented by their name in string form. In every game, a primary weapon is used, so there are no missing instances.
@@ -78,3 +80,118 @@ This visualization compares the number of deaths per game to the total XP obtain
 
 
 POTENTIAL BIG QUESTION: How does map/weapon choice/score affect overall performance?
+=======
+```{r}
+remove(list = ls())
+
+#Add libraries as needed
+library(tidyverse)
+library(readxl)
+
+#Read in dataset
+COD <- read_excel("C:/Users/aylao/Downloads/CODGames2_mp.xlsx")
+View(COD)
+```
+
+
+## Elimination Summary
+```{r}
+sum(is.na(COD$Eliminations))
+```
+
+```{r}
+
+COD %>%
+  summarize(N = n(),
+            mean = mean(Eliminations),
+            median= median(Eliminations),
+            StandardD = sd(Eliminations),
+            min = min(Eliminations),
+            max = max(Eliminations))
+
+```
+The Eliminations variable is quantitative. The amount of missing data Eliminations has is 0 because you are guaranteed to get eliminated per game. The mean of Eliminations is 15.09005, the median is 14, the Standard Deviation is 6.133161, the minimum is 2, and the max is 39.
+
+```{r}
+ggplot(data = COD, mapping = aes(x = Eliminations))+
+  geom_histogram(color = "black", fill = "#880808")
+```
+
+## Total XP Summary
+```{r}
+sum(is.na(COD$TotalXP))
+```
+```{r}
+COD %>%
+  summarize(N = n(),
+            mean = mean(TotalXP),
+            median = median(TotalXP),
+            StandardD = sd(TotalXP),
+            min = min(TotalXP),
+            max = max(TotalXP))
+```
+The number of missing data for TotalXP is 0. The mean for TotalXP is 11975.4, the median is 10328, the standard deviation is 6166.652, the minimum TotalXP is 1935, and the max is 43816.
+
+```{r}
+ggplot(data = COD, mapping = aes(x = TotalXP))+
+  geom_histogram(color = "black", fill = "#880808")
+```
+
+
+
+=======
+```
+
+```{r}
+#Read in dataset
+library(readxl)
+COD <- read_excel("C:/Misha/College Stuff/cmpsc132/hw/CODGames2_mp.xlsx")
+glimpse(COD)
+```
+Choice
+
+```{r}
+choice_table <- COD %>%
+  group_by(Choice) %>%
+  summarise(N = n()) %>%
+  arrange(desc(N))
+
+choice_table
+```
+
+```{r}
+ggplot(data = COD, mapping = aes(x = Choice)) +
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+Eliminations
+
+Deaths
+
+Score
+
+```{r}
+score_table <- COD %>%
+  summarise(total_score = sum(Score, na.rm = TRUE),
+            mean_score = mean(Score, na.rm = TRUE),
+            median_score = median(Score, na.rm = TRUE),
+            sd_score = sd(Score, na.rm = TRUE),
+            min_score = min(Score, na.rm = TRUE),
+            max_score = max(Score, na.rm = TRUE))
+
+score_table
+```
+
+```{r}
+ggplot(data = COD, mapping = aes(x = Choice, y = Score)) + 
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+Total XP
+
+Primary Weapon
+>>>>>>> 92ac87ed808e98a09658a1b893fa65d49af3e5b0
+
+>>>>>>> 535883b4a7b8d8fed25a3d3a4b85678f15c550c2
