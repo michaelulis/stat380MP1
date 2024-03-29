@@ -10,19 +10,46 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Front Matter
-```{r}
-remove(list = ls())
-
-#Add libraries as needed
+```{r loadPackages, message = FALSE, warning=FALSE}
+#Load packages with groundhog to improve stability
 library(tidyverse)
-library(readxl)
-<<<<<<< HEAD
-
-#Read in dataset
-COD <- read_excel("CODGames2_mp.xlsx")
-View(COD)
+library(rvest)
+library(ggplot2)
 ```
-<<<<<<< HEAD
+
+```{r}
+COD1 <- read_html(
+  x = "https://docs.google.com/spreadsheets/d/1Wv5dlzCYv37aY58MF9nuuYJbHRBWm_dQ/edit?usp=sharing&ouid=106338911046216482900&rtpof=true&sd=true"
+) %>%
+  html_elements(css = "table") %>%
+  html_table()
+```
+
+```{r}
+COD <- COD1[[1]]
+```
+
+```{r}
+COD[COD == ""] <- NA
+```
+
+```{r}
+colnames(COD) <- COD[1,]
+COD <- COD[-1, ]
+COD <- COD[-1, ]
+```
+
+```{r}
+COD <- COD[,-1]
+```
+
+```{r}
+COD$Eliminations <- as.numeric(COD$Eliminations)
+COD$Deaths <- as.numeric(COD$Deaths)
+COD$Score <- as.numeric(COD$Score)
+COD$TotalXP <- as.numeric(COD$TotalXP)
+COD$Damage <- as.numeric(COD$Damage)
+```
 
 ## MAERIC. Primary Weapon
 The PrimaryWeapon column represents the main weapon used in each Call of Duty game. PrimaryWeapon is a categorical variable. Each weapon is represented by their name in string form. In every game, a primary weapon is used, so there are no missing instances.
@@ -34,7 +61,7 @@ sum(is.na(COD$PrimaryWeapon))
 We can see the most common weapons used in this table and visualization.
 
 ```{r PrimaryWeapon Table}
-COD %>%
+table1 <- COD %>%
   group_by(PrimaryWeapon) %>%
   summarize(TimesPlayed=n()) %>%
   arrange(desc(TimesPlayed))
@@ -80,18 +107,6 @@ This visualization compares the number of deaths per game to the total XP obtain
 
 
 POTENTIAL BIG QUESTION: How does map/weapon choice/score affect overall performance?
-=======
-```{r}
-remove(list = ls())
-
-#Add libraries as needed
-library(tidyverse)
-library(readxl)
-
-#Read in dataset
-COD <- read_excel("C:/Users/aylao/Downloads/CODGames2_mp.xlsx")
-View(COD)
-```
 
 
 ## Elimination Summary
@@ -137,17 +152,6 @@ ggplot(data = COD, mapping = aes(x = TotalXP))+
   geom_histogram(color = "black", fill = "#880808")
 ```
 
-
-
-=======
-```
-
-```{r}
-#Read in dataset
-library(readxl)
-COD <- read_excel("C:/Misha/College Stuff/cmpsc132/hw/CODGames2_mp.xlsx")
-glimpse(COD)
-```
 Choice
 
 ```{r}
@@ -173,7 +177,7 @@ Score
 
 ```{r}
 score_table <- COD %>%
-  summarise(total_score = sum(Score, na.rm = TRUE),
+  summarize(total_score = sum(Score, na.rm = TRUE),
             mean_score = mean(Score, na.rm = TRUE),
             median_score = median(Score, na.rm = TRUE),
             sd_score = sd(Score, na.rm = TRUE),
