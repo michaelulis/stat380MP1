@@ -16,6 +16,7 @@ remove(list = ls())
 #Add libraries as needed
 library(tidyverse)
 library(readxl)
+<<<<<<< HEAD
 
 #Read in dataset
 COD <- read_excel("CODGames2_mp.xlsx")
@@ -79,4 +80,58 @@ ggplot(data = COD, mapping = aes(x = TotalXP))+
 
 
 
+=======
+```
+
+```{r}
+#Read in dataset
+library(readxl)
+COD <- read_excel("C:/Misha/College Stuff/cmpsc132/hw/CODGames2_mp.xlsx")
+glimpse(COD)
+```
+Choice
+
+```{r}
+choice_table <- COD %>%
+  group_by(Choice) %>%
+  summarise(N = n()) %>%
+  arrange(desc(N))
+
+choice_table
+```
+
+```{r}
+ggplot(data = COD, mapping = aes(x = Choice)) +
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+Eliminations
+
+Deaths
+
+Score
+
+```{r}
+score_table <- COD %>%
+  summarise(total_score = sum(Score, na.rm = TRUE),
+            mean_score = mean(Score, na.rm = TRUE),
+            median_score = median(Score, na.rm = TRUE),
+            sd_score = sd(Score, na.rm = TRUE),
+            min_score = min(Score, na.rm = TRUE),
+            max_score = max(Score, na.rm = TRUE))
+
+score_table
+```
+
+```{r}
+ggplot(data = COD, mapping = aes(x = Choice, y = Score)) + 
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+Total XP
+
+Primary Weapon
+>>>>>>> 92ac87ed808e98a09658a1b893fa65d49af3e5b0
 
