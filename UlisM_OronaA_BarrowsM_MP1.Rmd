@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(rvest)
 library(ggplot2)
+library(lubridate)
 ```
 
 ```{r}
@@ -199,3 +200,18 @@ Primary Weapon
 >>>>>>> 92ac87ed808e98a09658a1b893fa65d49af3e5b0
 
 >>>>>>> 535883b4a7b8d8fed25a3d3a4b85678f15c550c2
+
+
+## Part 3: Questions to Ask (feel free to add more, we can choose the best ones from this set)
+- What does the ratio in the Result column represent?
+- How is Score calculated?
+- How is Total XP calculated?
+- What do the different values in GameType mean?
+- Does this dataset represent the playing data for one player?
+
+## Part 4a (I extracted month from the Date column and got it into abbreviated format)
+```{r}
+COD <- COD %>%
+  mutate(month = month(as.POSIXlt(Date, format = "%m/%d/%Y")))
+COD$month <- month.abb[COD$month]
+```
