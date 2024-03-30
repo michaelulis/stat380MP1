@@ -209,9 +209,9 @@ Primary Weapon
 - What do the different values in GameType mean?
 - Does this dataset represent the playing data for one player?
 
-## Part 4a (I extracted month from the Date column and got it into abbreviated format)
+## Part 4a (I extracted month from the Date column)
 ```{r}
 COD <- COD %>%
   mutate(month = month(as.POSIXlt(Date, format = "%m/%d/%Y")))
-COD$month <- month.abb[COD$month]
+COD$month <- month.name[COD$month]
 ```
