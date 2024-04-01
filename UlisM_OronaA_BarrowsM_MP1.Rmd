@@ -133,6 +133,8 @@ ggplot(data = COD, mapping = aes(x = Eliminations))+
   geom_histogram(color = "black", fill = "#880808")
 ```
 
+From this visualization we can learn the distribution of Eliminations of the data set, like the maximum amount and the minimum amount.
+
 ## Total XP Summary
 ```{r}
 sum(is.na(COD$TotalXP))
@@ -153,6 +155,7 @@ ggplot(data = COD, mapping = aes(x = TotalXP))+
   geom_histogram(color = "black", fill = "#880808")
 ```
 
+From this visualization we can learn the distributino of the TotalXP within this data set. 
 Choice
 
 ```{r}
@@ -197,9 +200,7 @@ ggplot(data = COD, mapping = aes(x = Choice, y = Score)) +
 Total XP
 
 Primary Weapon
->>>>>>> 92ac87ed808e98a09658a1b893fa65d49af3e5b0
 
->>>>>>> 535883b4a7b8d8fed25a3d3a4b85678f15c550c2
 
 
 ## Part 3: Questions to Ask (feel free to add more, we can choose the best ones from this set)
