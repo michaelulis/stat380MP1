@@ -156,7 +156,8 @@ ggplot(data = COD, mapping = aes(x = TotalXP))+
 ```
 
 From this visualization we can learn the distributino of the TotalXP within this data set. 
-Choice
+
+## Map Choice
 
 ```{r}
 choice_table <- COD %>%
@@ -173,11 +174,7 @@ ggplot(data = COD, mapping = aes(x = Choice)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
-Eliminations
-
-Deaths
-
-Score
+## Score
 
 ```{r}
 score_table <- COD %>%
@@ -196,12 +193,6 @@ ggplot(data = COD, mapping = aes(x = Choice, y = Score)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-
-Total XP
-
-Primary Weapon
-
-
 
 ## Part 3: Questions to Ask (feel free to add more, we can choose the best ones from this set)
 - What does the ratio in the Result column represent?
