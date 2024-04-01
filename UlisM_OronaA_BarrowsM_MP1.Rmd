@@ -217,8 +217,6 @@ ggplot(data = COD, mapping = aes(x = Choice)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
-
-=======
 ## Score
 
 
@@ -262,5 +260,13 @@ ggplot(data = COD, mapping = aes(x = month, y = TotalXP)) +
 
 ## Part 4b
 Which game mode does this player perform the best in?
+```{r}
+ggplot(data = COD, mapping = aes(x = GameType, y = Score))+
+  geom_boxplot()
+```
 
-How well does the player perform depending on the different game modes based on score?
+We questioned how well does the player perform depending on the different game modes based on score? Based on this box plot, we can assume this player does better in the Game Type HC-TDM. However, there may not be enough data that accurately establishes the other Game Types accurately. 
+## Group Member Contributions
+
+Our group split up the project into different sections for each participant. Each group member conducted two variable summaries and their visualizations to go along with each. Michael was in charge of making sure each team member could easily access the COD data, because we used Github. Maeric created possible questions for question three and we later finalized which questions were most reasonable. He also worked on 4a. Ayla created to question for 4b and created the box plot, while also working on the writing sections throughout the project.
+
