@@ -252,6 +252,12 @@ ggplot(data = COD, mapping = aes(x = Choice, y = Score)) +
 COD <- COD %>%
   mutate(month = month(as.POSIXlt(Date, format = "%m/%d/%Y")))
 COD$month <- month.name[COD$month]
+COD$month <- factor(COD$month, levels=month.name)
+```
+
+```{r}
+ggplot(data = COD, mapping = aes(x = month, y = TotalXP)) +
+  geom_boxplot()
 ```
 
 ## Part 4b
