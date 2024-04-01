@@ -133,7 +133,7 @@ ggplot(data = COD, mapping = aes(x = Eliminations))+
   geom_histogram(color = "black", fill = "#880808")
 ```
 
-From this visualization we can learn the distribution of Eliminations of the data set, like the maximum amount and the minimum amount.
+From this visualization we can learn the distribution of Eliminations of the data set. In most instances this player got eliminated around 10 to 20 times per game. 
 
 ## Total XP Summary
 ```{r}
@@ -155,8 +155,8 @@ ggplot(data = COD, mapping = aes(x = TotalXP))+
   geom_histogram(color = "black", fill = "#880808")
 ```
 
-From this visualization we can learn the distributino of the TotalXP within this data set. 
-Choice
+From this visualization we can learn the distribution of the TotalXP within this data set. 
+Choice. In most instances this player got around 10000 TotalXP per game.
 
 ```{r}
 choice_table <- COD %>%
@@ -172,10 +172,6 @@ ggplot(data = COD, mapping = aes(x = Choice)) +
   geom_bar() + 
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
-
-Eliminations
-
-Deaths
 
 Score
 
@@ -197,18 +193,12 @@ ggplot(data = COD, mapping = aes(x = Choice, y = Score)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
-Total XP
-
-Primary Weapon
-
-
 
 ## Part 3: Questions to Ask (feel free to add more, we can choose the best ones from this set)
 - What does the ratio in the Result column represent?
 - How is Score calculated?
-- How is Total XP calculated?
 - What do the different values in GameType mean?
-- Does this dataset represent the playing data for one player?
+
 
 ## Part 4a (I extracted month from the Date column)
 ```{r}
@@ -216,3 +206,8 @@ COD <- COD %>%
   mutate(month = month(as.POSIXlt(Date, format = "%m/%d/%Y")))
 COD$month <- month.name[COD$month]
 ```
+
+## Part 4b
+Which game mode does this player perform the best in?
+
+How well does the player perform depending on the different game modes based on score?
