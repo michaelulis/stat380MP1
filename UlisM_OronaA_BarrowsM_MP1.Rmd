@@ -155,8 +155,13 @@ ggplot(data = COD, mapping = aes(x = TotalXP))+
   geom_histogram(color = "black", fill = "#880808")
 ```
 
+
 From this visualization we can learn the distribution of the TotalXP within this data set. 
 Choice. In most instances this player got around 10000 TotalXP per game.
+ 
+
+## Map Choice
+
 
 ```{r}
 choice_table <- COD %>%
@@ -173,7 +178,10 @@ ggplot(data = COD, mapping = aes(x = Choice)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
-Score
+
+=======
+## Score
+
 
 ```{r}
 score_table <- COD %>%
