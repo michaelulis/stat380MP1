@@ -19,6 +19,8 @@ library(lubridate)
 library(kableExtra)
 ```
 
+## Read in Data Set/Data Wrangling - Michael
+
 ```{r}
 COD1 <- read_html(
   x = "https://docs.google.com/spreadsheets/d/1Wv5dlzCYv37aY58MF9nuuYJbHRBWm_dQ/edit?usp=sharing&ouid=106338911046216482900&rtpof=true&sd=true"
@@ -82,10 +84,10 @@ COD$TotalXP <- as.numeric(COD$TotalXP)
 
 COD$Damage <- as.numeric(COD$Damage)
 
-peek(COD)
+glimpse(COD)
 ```
 
-## MAERIC. Primary Weapon
+## Primary Weapon - Maeric
 The PrimaryWeapon column represents the main weapon used in each Call of Duty game. PrimaryWeapon is a categorical variable. Each weapon is represented by their name in string form. In every game, a primary weapon is used, so there are no missing instances.
 
 ```{r Missing Instances of PrimaryWeapon}
@@ -116,13 +118,24 @@ table1 %>%
 ```{r}
 ggplot(COD, aes(x = PrimaryWeapon)) +
   geom_bar(fill = "#688823") +
-  labs(x = "Weapon Used",
-       y = "Count")
+  theme_minimal() +
+  labs(x = "Weapon Choice", 
+       y = "Total Games Played", 
+       title = "Bar Graph for Total Weapon Use",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12))
 ```
 
 We can learn that the player from whom this data was recorded uses the M16 the most, with 48 times played.
 
-## MAERIC. Deaths
+## Deaths - Maeric
 The Deaths column represents how many times the player gets killed by another during a match. Deaths is a numerical variable. This column does not have any missing instances.
 
 ```{r}
@@ -131,13 +144,25 @@ sum(is.na(COD$Deaths))
 We can learn more about the Deaths variable by examining this table and visualization.
 
 ```{r}
-COD %>%
-  summarize(N=n(),
+table2 <- COD %>%
+  summarize(total_deaths = sum(Deaths),
             mean=mean(Deaths),
             min=min(Deaths),
             median=median(Deaths),
             max=max(Deaths),
             sd=sd(Deaths))
+
+table2 %>%
+  kable(
+    digits = 2,
+    format.args = list(big.mark = ","),
+    caption = "Summary Table for Player Deaths",
+    col.names = c("Total Deaths", "Mean", "Minimum", "Median", "Maximum", "Standard Deviation"),
+    align = c("l", rep("c", 2)),
+    booktabs = TRUE
+  ) %>%
+  kableExtra::kable_classic(lightable_options = "striped",
+                            latex_options = c("scale_down", "HOLD_position"))
 ```
 Using this table, we learn that, on average, this player died 15 times per round. That is also the total number of deaths they achieved the most. At minimum, this player died 4 times in one match, but in their worst match, they suffered 42 deaths.
 
@@ -145,68 +170,129 @@ Using this table, we learn that, on average, this player died 15 times per round
 ggplot(COD, aes(x=Deaths, y=TotalXP)) +
   geom_point(color = "#880808") +
   geom_smooth(method=lm, se=FALSE, color = "red") +
-  labs(x = "Deaths",
-       y = "Total XP")
+  labs(x = "Deaths", 
+       y = "Total XP", 
+       title = "Total XP gained vs Deaths",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12))
 ```
 This visualization compares the number of deaths per game to the total XP obtained in that game. As indicated by the graph, there is not a strong correlation in either direction between deaths and total XP.
 
+## Elimination Summary - Ayla
 
-
-POTENTIAL BIG QUESTION: How does map/weapon choice/score affect overall performance?
-
-
-## Elimination Summary
 ```{r}
 sum(is.na(COD$Eliminations))
 ```
 
 ```{r}
 
-COD %>%
-  summarize(N = n(),
+table3 <- COD %>%
+  summarize(total_kills = sum(Eliminations),
             mean = mean(Eliminations),
             median= median(Eliminations),
             StandardD = sd(Eliminations),
             min = min(Eliminations),
             max = max(Eliminations))
 
+table3 %>%
+  kable(
+    digits = 2,
+    format.args = list(big.mark = ","),
+    caption = "Summary Table for Kills per Game",
+    col.names = c("Total Kills", "Mean", "Median", "Standard Deviation", "Minimum","Maximum"),
+    align = c("l", rep("c", 2)),
+    booktabs = TRUE
+  ) %>%
+  kableExtra::kable_classic(lightable_options = "striped",
+                            latex_options = c("scale_down", "HOLD_position"))
+
 ```
-The Eliminations variable is quantitative. The amount of missing data Eliminations has is 0 because you are guaranteed to get eliminated per game. The mean of Eliminations is 15.09005, the median is 14, the Standard Deviation is 6.133161, the minimum is 2, and the max is 39.
+The Eliminations variable is quantitative. The amount of missing data Eliminations has is 0 because you are guaranteed to some amount of kills per game even if it is 0. The mean of Eliminations is 15.09, the median is 14, the Standard Deviation is 6.13, the minimum is 2, and the max is 39.
 
 ```{r}
 ggplot(data = COD, mapping = aes(x = Eliminations))+
-  geom_histogram(color = "black", fill = "#880808")
+  geom_histogram(color = "black", fill = "#880808") +
+  labs(x = "Eliminations", 
+       y = "Games", 
+       title = "Number of Eliminations per Game",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12))
 ```
 
 From this visualization we can learn the distribution of Eliminations of the data set. In most instances this player got eliminated around 10 to 20 times per game. 
 
-## Total XP Summary
+## Total XP Summary - Ayla
+
 ```{r}
 sum(is.na(COD$TotalXP))
 ```
+
 ```{r}
-COD %>%
-  summarize(N = n(),
+table4 <- COD %>%
+  summarize(total_total_xp = sum(TotalXP),
             mean = mean(TotalXP),
             median = median(TotalXP),
             StandardD = sd(TotalXP),
             min = min(TotalXP),
             max = max(TotalXP))
+
+table4 %>%
+  kable(
+    digits = 2,
+    format.args = list(big.mark = ","),
+    caption = "Summary Table for TotalXP",
+    col.names = c("TotalXP Overall", "Mean", "Median", "Standard Deviation", "Minimum","Maximum"),
+    align = c("l", rep("c", 2)),
+    booktabs = TRUE
+  ) %>%
+  kableExtra::kable_classic(lightable_options = "striped",
+                            latex_options = c("scale_down", "HOLD_position"))
 ```
-The number of missing data for TotalXP is 0. The mean for TotalXP is 11975.4, the median is 10328, the standard deviation is 6166.652, the minimum TotalXP is 1935, and the max is 43816.
+The number of missing data for TotalXP is 0. The mean for TotalXP is 11,975.4, the median is 10,328, the standard deviation is 6,166.65, the minimum TotalXP is 1,935, and the max is 43,816.
 
 ```{r}
 ggplot(data = COD, mapping = aes(x = TotalXP))+
-  geom_histogram(color = "black", fill = "#880808")
+  geom_histogram(color = "black", fill = "#AAFF00") +
+  labs(x = "Total XP", 
+       y = "Games", 
+       title = "Total XP per Game",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12))
 ```
 
 
 From this visualization we can learn the distribution of the TotalXP within this data set. 
-Choice. In most instances this player got around 10000 TotalXP per game.
+In most instances this player got around 10000 TotalXP per game.
  
 
-## Map Choice
+## Map Choice - Michael
 
+The Choice column represents the map in each Call of Duty game. Choice is a categorical variable. Each map is represented by their name in string form. 
+
+```{r}
+sum(is.na(COD$Choice))
+```
 
 ```{r}
 choice_table <- COD %>%
@@ -214,17 +300,47 @@ choice_table <- COD %>%
   summarise(N = n()) %>%
   arrange(desc(N))
 
-choice_table
+choice_table %>%
+  kable(
+    digits = 2,
+    format.args = list(big.mark = ","),
+    caption = "Summary Table for Map Choice",
+    col.names = c("Map", "Total Games Played"),
+    align = c("l", rep("c", 2)),
+    booktabs = TRUE
+  ) %>%
+  kableExtra::kable_classic(lightable_options = "striped",
+                            latex_options = c("scale_down", "HOLD_position"))
 ```
+
+
 
 ```{r}
-ggplot(data = COD, mapping = aes(x = Choice)) +
+ggplot(data = COD, mapping = aes(x = Choice, fill = Choice)) +
   geom_bar() + 
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+  labs(x = "Map", 
+       y = "Games Played", 
+       title = "Number of Games per Map",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    axis.text.x = element_text(angle = 45, hjust=1), 
+    legend.position = "none")
 ```
 
-## Score
+We can see the most commonly played maps in this table and visualization.
 
+## Score - Michael
+
+```{r}
+sum(is.na(COD$Score))
+```
 
 ```{r}
 score_table <- COD %>%
@@ -235,15 +351,40 @@ score_table <- COD %>%
             min_score = min(Score, na.rm = TRUE),
             max_score = max(Score, na.rm = TRUE))
 
-score_table
+score_table %>%
+  kable(
+    digits = 2,
+    format.args = list(big.mark = ","),
+    caption = "Summary Table for Score",
+    col.names = c("Total Score", "Mean", "Median", "Standard Deviation", "Minimum","Maximum"),
+    align = c("l", rep("c", 2)),
+    booktabs = TRUE
+  ) %>%
+  kableExtra::kable_classic(lightable_options = "striped",
+                            latex_options = c("scale_down", "HOLD_position"))
 ```
+
+The number of missing data for Score is 0. The mean for Score is 2,944.53, the median is 2,770, the standard deviation is 1,464.97, the minimum Score is 100, and the max is 7,315.
 
 ```{r}
 ggplot(data = COD, mapping = aes(x = Choice, y = Score)) + 
   geom_boxplot() +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+  labs(x = "Map", 
+       y = "Score", 
+       title = "Score Statistics per Map",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
+This visualization depicts how well on average this player performs across the maps. It seems that this player has the highest average score on the "Express" map.
 
 ## Part 3: Questions to Ask (feel free to add more, we can choose the best ones from this set)
 - What does the ratio in the Result column represent?
@@ -261,18 +402,44 @@ COD$month <- factor(COD$month, levels=month.name)
 
 ```{r}
 ggplot(data = COD, mapping = aes(x = month, y = TotalXP)) +
-  geom_boxplot()
+  geom_boxplot() +
+  labs(x = "Month", 
+       y = "Total XP Gained", 
+       title = "XP Gained per Month",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12))
 ```
 
 ## Part 4b
+
 Which game mode does this player perform the best in?
+
 ```{r}
 ggplot(data = COD, mapping = aes(x = GameType, y = Score))+
-  geom_boxplot()
+  geom_boxplot(color = "black") +
+  labs(x = "Game Mode", 
+       y = "Score", 
+       title = "Score Statistics per Game Mode",
+       subtitle = "Call of Duty") +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    plot.subtitle = element_text(size = 12L,
+                                 hjust = 0.5),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12))
 ```
 
-We questioned how well does the player perform depending on the different game modes based on score? Based on this box plot, we can assume this player does better in the Game Type HC-TDM. However, there may not be enough data that accurately establishes the other Game Types accurately. 
+We questioned how well does the player perform depending on the different game modes based on score? Based on this box plot, we can assume this player does better in the Team Deathmatch game mode. However, there may not be enough data that accurately establishes the other Game Types accurately. 
+
 ## Group Member Contributions
 
-Our group split up the project into different sections for each participant. Each group member conducted two variable summaries and their visualizations to go along with each. Michael was in charge of making sure each team member could easily access the COD data, because we used Github. Maeric created possible questions for question three and we later finalized which questions were most reasonable. He also worked on 4a. Ayla created to question for 4b and created the box plot, while also working on the writing sections throughout the project.
-
+Our group split up the project into different sections for each participant. Each group member conducted two variable summaries and their visualizations to go along with each. Michael was in charge of making sure each team member could easily access the COD data, because we used Github. Maeric created possible questions for question three and we later finalized which questions were most reasonable. He also worked on 4a. Ayla created to question for 4b and created the box plot, while also working on the writing sections throughout the project. Michael polished the project at the end.
