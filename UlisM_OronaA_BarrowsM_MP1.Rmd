@@ -16,6 +16,7 @@ library(tidyverse)
 library(rvest)
 library(ggplot2)
 library(lubridate)
+library(kableExtra)
 ```
 
 ```{r}
@@ -24,71 +25,64 @@ COD1 <- read_html(
 ) %>%
   html_elements(css = "table") %>%
   html_table()
-```
 
-```{r}
 COD1 <- COD1[[1]]
-```
 
-
-```{r}
 COD2 <- read_html(
   x = "https://docs.google.com/spreadsheets/d/1Ora5ZiTjb2qrmqPV6P1wh7CyJweHpw7NJ1kxXWVodfk/edit?usp=sharing"
 ) %>%
   html_elements(css = "table") %>%
   html_table()
-```
 
-```{r}
 COD2 <- COD2[[1]]
-```
 
-```{r}
 COD3 <- read_html(
   x = "https://docs.google.com/spreadsheets/d/1ZlUHg4408PpJlFJeXENcqujAI7LWRL0o8ElHciJNlEw/edit?usp=sharing"
 ) %>%
   html_elements(css = "table") %>%
   html_table()
-```
 
-```{r}
 COD3 <- COD3[[1]]
-```
 
-```{r}
 colnames(COD1) <- COD1[1,]
+
 colnames(COD2) <- COD2[1,]
+
 colnames(COD3) <- COD3[1,]
-```
 
-```{r}
 COD1 <- COD1[-1, ]
+
 COD1 <- COD1[-1, ]
+
 COD1 <- COD1[, -1]
+
 COD2 <- COD2[-1, ]
+
 COD2 <- COD2[, -1]
+
 COD3 <- COD3[-1, ]
+
 COD3 <- COD3[, -1]
-```
 
-```{r}
 COD3 <- COD3[-(14:99),]
-```
 
-```{r}
 COD <- full_join(COD1, COD2)
-COD <- full_join(COD, COD3)
-```
-```{r}
-COD[COD == ""] <- NA
-```
 
-```{r}
+COD <- full_join(COD, COD3)
+
+COD[COD == ""] <- NA
+
 COD$Eliminations <- as.numeric(COD$Eliminations)
+
 COD$Deaths <- as.numeric(COD$Deaths)
+
 COD$Score <- as.numeric(COD$Score)
+
 COD$TotalXP <- as.numeric(COD$TotalXP)
+
 COD$Damage <- as.numeric(COD$Damage)
+
+peek(COD)
 ```
 
 ## MAERIC. Primary Weapon
@@ -105,11 +99,23 @@ table1 <- COD %>%
   group_by(PrimaryWeapon) %>%
   summarize(TimesPlayed=n()) %>%
   arrange(desc(TimesPlayed))
+
+table1 %>%
+  kable(
+    digits = 2,
+    format.args = list(big.mark = ","),
+    caption = "Summary Table for Primary Weapon Use",
+    col.names = c("Weapon", "Total Games Played"),
+    align = c("l", rep("c", 2)),
+    booktabs = TRUE
+  ) %>%
+  kableExtra::kable_classic(lightable_options = "striped",
+                            latex_options = c("scale_down", "HOLD_position"))
 ```
 
 ```{r}
 ggplot(COD, aes(x = PrimaryWeapon)) +
-  geom_bar(fill = "maroon") +
+  geom_bar(fill = "#688823") +
   labs(x = "Weapon Used",
        y = "Count")
 ```
